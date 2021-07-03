@@ -16,12 +16,11 @@ var BUCKET = flag.String("b", os.Getenv("BUCKET"), "S3 Bucket Name")
 var KEY = flag.String("k", os.Getenv("KEY"), "S3 Key")
 var FILE = flag.String("f", os.Getenv("FILE"), "File to be uploaded")
 
-func Upload() error {
-
+func main() {
+	flag.Parse()
 	file, err := os.Open(*FILE)
 	if err != nil {
 		log.Println(err)
-		return err
 	}
 	defer file.Close()
 	fileInfo, _ := file.Stat()
@@ -32,7 +31,6 @@ func Upload() error {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		log.Println(err)
-		return err
 	}
 
 	uploader := manager.NewUploader(s3.NewFromConfig(cfg), func(u *manager.Uploader) {
@@ -47,7 +45,8 @@ func Upload() error {
 	})
 	if err != nil {
 		log.Println(err)
-		return err
+	} else {
+		log.Println(*FILE + " uploaded to: " + *BUCKET + "/" + *KEY)
 	}
-	return err
+
 }
