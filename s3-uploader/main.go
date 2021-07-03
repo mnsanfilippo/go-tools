@@ -1,4 +1,4 @@
-package s3_uploader
+package main
 
 import (
 	"bytes"
